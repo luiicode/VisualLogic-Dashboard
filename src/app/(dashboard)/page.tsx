@@ -1,9 +1,7 @@
-export default function DashboardPage() {
+export default function OverviewPage() {
   return (
-    <>
-      <main>
-        <h1>Dashboard</h1>
-      </main>
-    </>
+    <div>
+      <h1>Dashboard Page</h1>
+    </div>
   );
 }
