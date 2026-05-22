@@ -2,6 +2,7 @@ import { AppSidebar } from "@/components/app-sidebar";
 import { TopBar } from "@/components/custom/TopBar";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import React from "react";
 
 export default function DashboardLayout({
   children,
