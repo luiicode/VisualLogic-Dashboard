@@ -1,14 +1,12 @@
 import {
-  ChartLineIcon,
-  ContactIcon,
-  DatabaseIcon,
-  FrameIcon,
-  HelpCircleIcon,
-  HomeIcon,
-  MapIcon,
-  PieChartIcon,
-  StoreIcon,
-  TicketIcon,
+    ChartLineIcon,
+    ContactIcon,
+    FrameIcon,
+    HelpCircleIcon,
+    HomeIcon,
+    PieChartIcon, Smartphone,
+    StoreIcon,
+    TicketIcon,
 } from "lucide-react";
 
 export const data = {
@@ -48,25 +46,25 @@ export const data = {
   navSecondary: [
     {
       title: "Support",
-      url: "#",
+      url: "/support",
       icon: <HelpCircleIcon />,
     },
   ],
   projects: [
     {
-      name: "Design Engineering",
+      name: "Atlas CRM",
       url: "#",
       icon: <FrameIcon />,
     },
     {
-      name: "Sales & Marketing",
+      name: "Orbit Analytics",
       url: "#",
       icon: <PieChartIcon />,
     },
     {
-      name: "Travel",
+      name: "Nimbus Mobile",
       url: "#",
-      icon: <MapIcon />,
+      icon: <Smartphone />,
     },
   ],
 };

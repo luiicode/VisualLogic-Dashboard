@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import {
   DropdownMenu,
@@ -6,7 +6,7 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+} from "@/components/ui/dropdown-menu";
 import {
   SidebarGroup,
   SidebarGroupLabel,
@@ -15,23 +15,39 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   useSidebar,
-} from "@/components/ui/sidebar"
-import { MoreHorizontalIcon, FolderIcon, ShareIcon, Trash2Icon } from "lucide-react"
+} from "@/components/ui/sidebar";
+import {
+  MoreHorizontalIcon,
+  FolderIcon,
+  ShareIcon,
+  Trash2Icon,
+  Plus,
+} from "lucide-react";
+import Link from "next/link";
 
 export function NavProjects({
   projects,
 }: {
   projects: {
-    name: string
-    url: string
-    icon: React.ReactNode
-  }[]
+    name: string;
+    url: string;
+    icon: React.ReactNode;
+  }[];
 }) {
-  const { isMobile } = useSidebar()
+  const { isMobile } = useSidebar();
 
   return (
     <SidebarGroup className="group-data-[collapsible=icon]:hidden">
-      <SidebarGroupLabel>Projects</SidebarGroupLabel>
+      <SidebarGroupLabel className="flex items-center justify-between">
+        <span className="text-sm font-medium">Projects</span>
+        <SidebarMenuButton
+          className="ml-2 h-8 w-8 inline-flex items-center justify-center rounded"
+          aria-label="Add project"
+          title="Add project"
+        >
+          <Plus />
+        </SidebarMenuButton>
+      </SidebarGroupLabel>
       <SidebarMenu>
         {projects.map((item) => (
           <SidebarMenuItem key={item.name}>
@@ -47,8 +63,7 @@ export function NavProjects({
                   showOnHover
                   className="aria-expanded:bg-muted"
                 >
-                  <MoreHorizontalIcon
-                  />
+                  <MoreHorizontalIcon />
                   <span className="sr-only">More</span>
                 </SidebarMenuAction>
               </DropdownMenuTrigger>
@@ -76,12 +91,13 @@ export function NavProjects({
         ))}
         <SidebarMenuItem>
           <SidebarMenuButton>
-            <MoreHorizontalIcon
-            />
-            <span>More</span>
+            <Link href={"/projects"}>
+              <span>View All Projects</span>
+            </Link>
+            <MoreHorizontalIcon />
           </SidebarMenuButton>
         </SidebarMenuItem>
       </SidebarMenu>
     </SidebarGroup>
-  )
+  );
 }
