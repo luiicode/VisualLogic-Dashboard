@@ -25,11 +25,6 @@ export const data = {
       isActive: true,
     },
     {
-      title: "Data Explorer",
-      url: "/data-explorer",
-      icon: <DatabaseIcon />,
-    },
-    {
       title: "Tickets",
       url: "/tickets",
       icon: <TicketIcon />,
