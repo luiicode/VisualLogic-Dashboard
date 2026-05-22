@@ -45,8 +45,8 @@ export const data = {
       icon: <ChartLineIcon />,
     },
     {
-      title: "Users",
-      url: "/users",
+      title: "Teams",
+      url: "/teams",
       icon: <ContactIcon />,
     },
   ],

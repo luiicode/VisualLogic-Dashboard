@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/sidebar";
 import { ChevronRightIcon } from "lucide-react";
 import Link from "next/link";
+import React from "react";
 
 export function NavMain({
   items,
