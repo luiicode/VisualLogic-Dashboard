@@ -1,20 +1,16 @@
 import {
-    ChartLineIcon,
-    ContactIcon,
-    FrameIcon,
-    HelpCircleIcon,
-    HomeIcon,
-    PieChartIcon, Smartphone,
-    StoreIcon,
-    TicketIcon,
+  ChartLineIcon,
+  ContactIcon,
+  FrameIcon,
+  HelpCircleIcon,
+  HomeIcon,
+  PieChartIcon,
+  Smartphone,
+  StoreIcon,
+  TicketIcon,
 } from "lucide-react";
 
 export const data = {
-  user: {
-    name: "Luis Cortes",
-    email: "luiscorte@visualogic.com",
-    avatar: "https://github.com/shadcn.png",
-  },
   navMain: [
     {
       title: "Overview",
