@@ -1,4 +1,4 @@
-import StatCard from "@/features/Overview/components/StatCard";
+import StatCard from "@/features/Overview/components/stat/StatCard";
 import { DollarSign, ShoppingCart, UsersIcon, TicketIcon } from "lucide-react";
 
 export default function KPIsCards() {
