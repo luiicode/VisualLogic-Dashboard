@@ -8,17 +8,13 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { statusVariant } from "@/features/teams/constants/status-style";
-import { Status } from "@/features/teams/types/statusType";
+import { Member } from "@/features/teams/interfaces/MemberInterface";
 
-interface Member {
-  name: string;
-  email: string;
-  role: string;
-  activity: string;
-  status: Status;
-}
-
-export default function ProjectMembersTable({ members }: { members: Member[] }) {
+export default function ProjectMembersTable({
+  members,
+}: {
+  members: Member[];
+}) {
   return (
     <Table>
       <TableHeader>
@@ -51,4 +47,3 @@ export default function ProjectMembersTable({ members }: { members: Member[] }) 
     </Table>
   );
 }
-

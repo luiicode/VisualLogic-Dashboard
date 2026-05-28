@@ -1,19 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import ProjectMembersTable from "@/features/teams/components/table/ProjectMembersTable";
-import { Status } from "@/features/teams/types/statusType";
-
-interface Member {
-  name: string;
-  email: string;
-  role: string;
-  activity: string;
-  status: Status;
-}
-
-interface Project {
-  name: string;
-  members: Member[];
-}
+import { Project } from "@/features/teams/interfaces/ProjectInterface";
 
 export default function ProjectCard({ project }: { project: Project }) {
   return (
@@ -27,4 +14,3 @@ export default function ProjectCard({ project }: { project: Project }) {
     </Card>
   );
 }
-
