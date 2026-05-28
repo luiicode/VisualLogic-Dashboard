@@ -1,9 +1,9 @@
-import OverviewHeaderPage from "@/features/Overview/components/OverviewHeaderPage";
-import KPIsCards from "@/features/Overview/components/KPIsCards";
-import FirstChartsRow from "@/features/Overview/components/FirstChartsRow";
-import SecondChartsRow from "@/features/Overview/components/SecondChartsRow";
-import TablesSection from "@/features/Overview/components/TablesSection";
-import KPIsFooter from "@/features/Overview/components/KPIsFooter";
+import OverviewHeaderPage from "@/features/Overview/components/section/OverviewHeaderPage";
+import KPIsCards from "@/features/Overview/components/section/KPIsCards";
+import FirstChartsRow from "@/features/Overview/components/section/FirstChartsRow";
+import SecondChartsRow from "@/features/Overview/components/section/SecondChartsRow";
+import TablesSection from "@/features/Overview/components/section/TablesSection";
+import KPIsFooter from "@/features/Overview/components/section/KPIsFooter";
 
 export default function DashboardOverview() {
   return (
