@@ -1,5 +1,12 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import OrdersPerMonthChart from "@/features/sales/components/chart/OrdersPerMonthChart";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Suspense } from "react";
+import OrdersPerMonthWrapper from "@/features/sales/components/wrapper/OrdersPerMonthWrapper";
 
 export default function OrdersPerMonthCard() {
   return (
@@ -9,9 +16,10 @@ export default function OrdersPerMonthCard() {
         <CardDescription>Volumen de transacciones</CardDescription>
       </CardHeader>
       <CardContent>
-        <OrdersPerMonthChart />
+        <Suspense fallback={<div>Cargando datos de Salesforce...</div>}>
+          <OrdersPerMonthWrapper />
+        </Suspense>
       </CardContent>
     </Card>
   );
 }
-

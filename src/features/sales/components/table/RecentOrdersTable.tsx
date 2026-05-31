@@ -7,10 +7,18 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { recentOrders } from "@/features/sales/data/recentOrders";
 import { statusVariant } from "@/features/sales/constants/status-style";
 
-export default function RecentOrdersTable() {
+interface Order {
+  id: string;
+  customer: string;
+  product: string;
+  date: string;
+  amount: number;
+  status: keyof typeof statusVariant;
+}
+
+export default function RecentOrdersTable({ data }: { data: Order[] }) {
   return (
     <Table>
       <TableHeader>
@@ -24,7 +32,7 @@ export default function RecentOrdersTable() {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {recentOrders.map((o) => (
+        {(data || []).map((o) => (
           <TableRow key={o.id}>
             <TableCell className="font-medium">{o.id}</TableCell>
             <TableCell>{o.customer}</TableCell>
@@ -44,4 +52,3 @@ export default function RecentOrdersTable() {
     </Table>
   );
 }
-

@@ -1,5 +1,12 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import RecentOrdersTable from "@/features/sales/components/table/RecentOrdersTable";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import RecentOrdersWrapper from "@/features/sales/components/wrapper/RecentOrdersWrapper";
+import { Suspense } from "react";
 
 export default function RecentOrdersCard() {
   return (
@@ -9,9 +16,10 @@ export default function RecentOrdersCard() {
         <CardDescription>Últimas transacciones registradas</CardDescription>
       </CardHeader>
       <CardContent>
-        <RecentOrdersTable />
+        <Suspense fallback={<div>Cargando datos de Salesforce...</div>}>
+          <RecentOrdersWrapper />
+        </Suspense>
       </CardContent>
     </Card>
   );
 }
-

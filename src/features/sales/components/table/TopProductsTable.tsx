@@ -6,9 +6,17 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { topProducts } from "@/features/sales/constants/topProducts";
 
-export default function TopProductsTable() {
+interface TopProductsTableProps {
+  data: {
+    id: number;
+    product: string;
+    units: number;
+    revenue: number;
+  }[];
+}
+
+export default function TopProductsTable({ data }: TopProductsTableProps) {
   return (
     <Table>
       <TableHeader>
@@ -20,10 +28,10 @@ export default function TopProductsTable() {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {topProducts.map((p, i) => (
-          <TableRow key={p.name}>
-            <TableCell className="text-muted-foreground">{i + 1}</TableCell>
-            <TableCell className="font-medium">{p.name}</TableCell>
+        {data.map((p, i) => (
+          <TableRow key={p.product}>
+            <TableCell className="text-muted-foreground">{p.id}</TableCell>
+            <TableCell className="font-medium">{p.product}</TableCell>
             <TableCell className="text-right">
               {p.units.toLocaleString()}
             </TableCell>
@@ -36,4 +44,3 @@ export default function TopProductsTable() {
     </Table>
   );
 }
-

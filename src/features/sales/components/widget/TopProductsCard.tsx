@@ -1,5 +1,12 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import TopProductsTable from "@/features/sales/components/table/TopProductsTable";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import TopProductsWrapper from "@/features/sales/components/wrapper/TopProductsWrapper";
+import { Suspense } from "react";
 
 export default function TopProductsCard() {
   return (
@@ -9,9 +16,10 @@ export default function TopProductsCard() {
         <CardDescription>Ranking por ingresos generados</CardDescription>
       </CardHeader>
       <CardContent>
-        <TopProductsTable />
+        <Suspense fallback={<div>Cargando datos de Salesforce...</div>}>
+          <TopProductsWrapper />
+        </Suspense>
       </CardContent>
     </Card>
   );
 }
-

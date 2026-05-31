@@ -4,13 +4,18 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import { revenueConfig } from "@/features/sales/constants/revenueConfig";
-import { monthly } from "@/features/sales/constants/monthly";
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
 
-export default function MonthlyRevenueChart() {
+interface MonthlyRevenueChartProps {
+  data: { month: string; revenue: number }[];
+}
+
+export default function MonthlyRevenueChart({
+  data,
+}: MonthlyRevenueChartProps) {
   return (
     <ChartContainer config={revenueConfig} className="h-[280px] w-full">
-      <AreaChart data={monthly}>
+      <AreaChart data={data}>
         <defs>
           <linearGradient id="rev" x1="0" y1="0" x2="0" y2="1">
             <stop
@@ -40,4 +45,3 @@ export default function MonthlyRevenueChart() {
     </ChartContainer>
   );
 }
-

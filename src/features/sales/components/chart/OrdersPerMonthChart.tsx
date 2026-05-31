@@ -4,13 +4,18 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import { revenueConfig } from "@/features/sales/constants/revenueConfig";
-import { monthly } from "@/features/sales/constants/monthly";
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
 
-export default function OrdersPerMonthChart() {
+interface OrdersPerMonthChartProps {
+  data: { month: string; orders: number }[];
+}
+
+export default function OrdersPerMonthChart({
+  data,
+}: OrdersPerMonthChartProps) {
   return (
     <ChartContainer config={revenueConfig} className="h-[240px] w-full">
-      <BarChart data={monthly}>
+      <BarChart data={data}>
         <CartesianGrid strokeDasharray="3 3" vertical={false} />
         <XAxis dataKey="month" tickLine={false} axisLine={false} />
         <YAxis tickLine={false} axisLine={false} width={40} />
@@ -24,4 +29,3 @@ export default function OrdersPerMonthChart() {
     </ChartContainer>
   );
 }
-
