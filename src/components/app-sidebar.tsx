@@ -19,6 +19,7 @@ import { LogoIcon } from "./ui/svg/LogoIcon";
 import Link from "next/link";
 
 import { data } from "@/mock/mock.data";
+import { NavProjectsWrapper } from "@/components/wrapper/NavProjectsWrapper";
 
 interface AppSidebarProps extends React.ComponentProps<typeof Sidebar> {
   user: {
@@ -50,7 +51,7 @@ export function AppSidebar({ user, ...props }: AppSidebarProps) {
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={data.navMain} />
-        <NavProjects projects={data.projects} />
+        <NavProjectsWrapper />
         <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>
       <SidebarFooter>
