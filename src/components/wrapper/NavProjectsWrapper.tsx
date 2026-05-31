@@ -1,50 +1,47 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import useSWR from "swr";
 import { NavProjects } from "@/components/nav-projects";
 import { fetchSidebarProjects } from "@/lib/actions/teams";
 import { Hash, FolderOpen, LayoutTemplate, Box } from "lucide-react";
 
+async function getAndFormatSidebarProjects() {
+  const projectNames = await fetchSidebarProjects();
+
+  // Una pequeña colección de íconos para asignarlos dinámicamente
+  const icons = [
+    <Hash key="1" />,
+    <LayoutTemplate key="2" />,
+    <FolderOpen key="3" />,
+    <Box key="4" />,
+  ];
+
+  // Transformamos la lista de nombres de Salesforce al formato exacto que pide el NavProjects
+  return projectNames.map((name, index) => ({
+    name,
+    // Creamos una URL amigable automáticamente (ej. "Atlas CRM" -> "/projects/atlas-crm")
+    url: `/projects/${name.toLowerCase().replace(/\s+/g, "-")}`,
+    // Asignamos un ícono rotativo de la colección
+    icon: icons[index % icons.length],
+  }));
+}
+
 export function NavProjectsWrapper() {
-  const [projects, setProjects] = useState<
-    { name: string; url: string; icon: React.ReactNode }[]
-  >([]);
-  const [loading, setLoading] = useState(true);
+  // 2. Usamos SWR con una llave única.
+  // Nota: Renombramos 'data' a 'projects' para que coincida con el prop de abajo.
+  const { data: projects, isLoading } = useSWR(
+    "sidebar-projects-data",
+    getAndFormatSidebarProjects,
+    {
+      revalidateOnFocus: false,
+      // Le damos 5 minutos (300000 ms) de caché porque los nombres de los proyectos
+      // rara vez cambian en el día a día. ¡Puro rendimiento!
+      dedupingInterval: 300000,
+    },
+  );
 
-  useEffect(() => {
-    async function loadProjects() {
-      try {
-        const projectNames = await fetchSidebarProjects();
-
-        // Una pequeña colección de íconos para asignarlos dinámicamente
-        const icons = [
-          <Hash key="1" />,
-          <LayoutTemplate key="2" />,
-          <FolderOpen key="3" />,
-          <Box key="4" />,
-        ];
-
-        // Transformamos la lista de nombres de Salesforce al formato exacto que pide el NavProjects
-        const formattedProjects = projectNames.map((name, index) => ({
-          name,
-          // Creamos una URL amigable automáticamente (ej. "Atlas CRM" -> "/projects/atlas-crm")
-          url: `/projects/${name.toLowerCase().replace(/\s+/g, "-")}`,
-          // Asignamos un ícono rotativo de la colección
-          icon: icons[index % icons.length],
-        }));
-
-        setProjects(formattedProjects);
-      } catch (error) {
-        console.error("Error cargando proyectos del sidebar:", error);
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    loadProjects();
-  }, []);
-
-  if (loading) {
+  // 3. Estado de carga de SWR
+  if (isLoading) {
     // Un pequeño esqueleto de carga discreto para no romper el diseño del sidebar
     return (
       <div className="px-4 py-3 text-xs text-muted-foreground animate-pulse">
@@ -53,8 +50,8 @@ export function NavProjectsWrapper() {
     );
   }
 
-  // Si no hay proyectos, podemos ocultar la sección o mostrar un mensaje
-  if (projects.length === 0) {
+  // Si la data es undefined o el arreglo viene vacío, ocultamos la sección
+  if (!projects || projects.length === 0) {
     return null;
   }
 

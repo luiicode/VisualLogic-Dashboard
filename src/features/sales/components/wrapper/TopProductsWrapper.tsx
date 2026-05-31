@@ -1,52 +1,44 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import useSWR from "swr";
 import { fetchTopProductsData } from "@/lib/actions/sales";
 import TopProductsTable from "../table/TopProductsTable";
+import { TopProductRecord } from "@/features/sales/interfaces/TopProductRecord";
 
-interface TopProductRecord {
-  Producto__c?: string;
-  TotalUnidades?: number;
-  TotalIngresos?: number;
+async function getAndFormatTopProducts() {
+  const productos = await fetchTopProductsData();
+
+  // Mapeamos los datos de Data Cloud al formato esperado
+  return (productos || []).map((p: TopProductRecord, index: number) => ({
+    id: index + 1, // Esto genera el número de ranking (#) automáticamente (1, 2, 3...)
+    product: p.Producto__c || "N/A",
+    units: p.TotalUnidades || 0,
+    revenue: p.TotalIngresos || 0,
+  }));
 }
 
 export default function TopProductsWrapper() {
-  const [data, setData] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
+  // 2. Usamos SWR con la llave "top-products-data"
+  const { data, isLoading } = useSWR(
+    "top-products-data",
+    getAndFormatTopProducts,
+    {
+      revalidateOnFocus: false, // Protege los límites de la API
+      dedupingInterval: 60000, // 1 minuto de caché
+    },
+  );
 
-  useEffect(() => {
-    async function loadData() {
-      try {
-        const productos = await fetchTopProductsData();
-
-        // Mapeamos los datos de Data Cloud al formato que esperado
-        const formattedData = (productos || []).map(
-          (p: TopProductRecord, index: number) => ({
-            id: index + 1, // Esto genera el número de ranking (#) automáticamente (1, 2, 3...)
-            product: p.Producto__c || "N/A",
-            units: p.TotalUnidades || 0,
-            revenue: p.TotalIngresos || 0,
-          }),
-        );
-
-        setData(formattedData);
-      } catch (error) {
-        console.error("Error cargando productos top:", error);
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    loadData();
-  }, []);
-
-  if (loading) {
+  // 3. Manejamos la carga de SWR
+  if (isLoading) {
     return (
       <div className="p-6 text-center text-sm text-muted-foreground animate-pulse">
         Calculando ranking de productos top...
       </div>
     );
   }
+
+  // Prevenimos que la tabla falle si data es undefined por un instante
+  if (!data) return null;
 
   return <TopProductsTable data={data} />;
 }

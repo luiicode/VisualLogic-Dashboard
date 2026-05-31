@@ -1,74 +1,74 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import useSWR from "swr";
 import { fetchMonthlyRevenueData } from "@/lib/actions/sales";
 import MonthlyRevenueChart from "../chart/MonthlyRevenueChart";
 
-export default function MonthlyRevenueWrapper() {
-  const [data, setData] = useState<{ month: string; revenue: number }[]>([]);
-  const [loading, setLoading] = useState(true);
+async function getAndFormatMonthlyRevenue() {
+  const rawData = await fetchMonthlyRevenueData();
 
-  useEffect(() => {
-    async function loadData() {
-      try {
-        const rawData = await fetchMonthlyRevenueData();
+  // Plantilla de meses en cero
+  const monthNames = [
+    "Ene",
+    "Feb",
+    "Mar",
+    "Abr",
+    "May",
+    "Jun",
+    "Jul",
+    "Ago",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dic",
+  ];
 
-        // Plantilla de meses en cero
-        const monthNames = [
-          "Ene",
-          "Feb",
-          "Mar",
-          "Abr",
-          "May",
-          "Jun",
-          "Jul",
-          "Ago",
-          "Sep",
-          "Oct",
-          "Nov",
-          "Dic",
-        ];
-        const monthlyRevenue = monthNames.map((month) => ({
-          month,
-          revenue: 0,
-        }));
+  const monthlyRevenue = monthNames.map((month) => ({
+    month,
+    revenue: 0,
+  }));
 
-        // Sumamos los ingresos al mes correspondiente
-        rawData.forEach((venta: any) => {
-          if (venta.Fecha__c) {
-            const date = new Date(venta.Fecha__c + "T00:00:00");
-            const monthIndex = date.getMonth();
+  // Sumamos los ingresos al mes correspondiente
+  rawData.forEach((venta: any) => {
+    if (venta.Fecha__c) {
+      const date = new Date(venta.Fecha__c + "T00:00:00");
+      const monthIndex = date.getMonth();
 
-            if (monthIndex >= 0 && monthIndex <= 11) {
-              // Toma el valor de Ingresos__c. Si está vacío, toma Monto__c.
-              const amount = venta.Ingresos__c || venta.Monto__c || 0;
-              monthlyRevenue[monthIndex].revenue += amount;
-            }
-          }
-        });
-
-        // Filtramos para mostrar desde Enero hasta el mes actual
-        const currentMonth = new Date().getMonth();
-        const filteredData = monthlyRevenue.slice(0, currentMonth + 1);
-
-        setData(filteredData);
-      } catch (error) {
-        console.error("Error cargando gráfica de ingresos:", error);
-      } finally {
-        setLoading(false);
+      if (monthIndex >= 0 && monthIndex <= 11) {
+        // Toma el valor de Ingresos__c. Si está vacío, toma Monto__c.
+        const amount = venta.Ingresos__c || venta.Monto__c || 0;
+        monthlyRevenue[monthIndex].revenue += amount;
       }
     }
+  });
 
-    loadData();
-  }, []);
+  // Filtramos para mostrar desde Enero hasta el mes actual
+  const currentMonth = new Date().getMonth();
+  return monthlyRevenue.slice(0, currentMonth + 1);
+}
 
-  if (loading) {
+export default function MonthlyRevenueWrapper() {
+  // 2. Usamos SWR con una llave única para esta gráfica ("monthly-revenue-data")
+  const { data, isLoading } = useSWR(
+    "monthly-revenue-data",
+    getAndFormatMonthlyRevenue,
+    {
+      revalidateOnFocus: false, // Evita peticiones innecesarias al cambiar de pestaña
+      dedupingInterval: 60000, // Usa el caché durante 1 minuto completo
+    },
+  );
+
+  // 3. SWR nos da la variable isLoading automáticamente
+  if (isLoading) {
     return (
       <div className="flex h-[280px] items-center justify-center text-sm text-muted-foreground animate-pulse">
         Calculando ingresos mensuales...
       </div>
     );
   }
+
+  // Prevención de errores por si la data llega vacía momentáneamente
+  if (!data) return null;
 
   return <MonthlyRevenueChart data={data} />;
 }

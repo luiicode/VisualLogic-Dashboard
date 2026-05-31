@@ -46,21 +46,4 @@ export const data = {
       icon: <HelpCircleIcon />,
     },
   ],
-  projects: [
-    {
-      name: "Atlas CRM",
-      url: "#",
-      icon: <FrameIcon />,
-    },
-    {
-      name: "Orbit Analytics",
-      url: "#",
-      icon: <PieChartIcon />,
-    },
-    {
-      name: "Nimbus Mobile",
-      url: "#",
-      icon: <Smartphone />,
-    },
-  ],
 };
