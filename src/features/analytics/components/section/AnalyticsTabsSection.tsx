@@ -1,7 +1,7 @@
 "use client";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import AnalyticsGridSection from "@/features/analytics/components/section/AnalyticsGridSection";
+import AnalyticsWrapper from "@/features/analytics/components/wrapper/AnalyticsWrapper";
 
 export default function AnalyticsTabsSection() {
   return (
@@ -12,15 +12,14 @@ export default function AnalyticsTabsSection() {
         <TabsTrigger value="anio">Año</TabsTrigger>
       </TabsList>
       <TabsContent value="mes" className="mt-4">
-        <AnalyticsGridSection period="mes" />
+        <AnalyticsWrapper period="mes" />
       </TabsContent>
       <TabsContent value="trimestre" className="mt-4">
-        <AnalyticsGridSection period="trimestre" />
+        <AnalyticsWrapper period="trimestre" />
       </TabsContent>
       <TabsContent value="anio" className="mt-4">
-        <AnalyticsGridSection period="anio" />
+        <AnalyticsWrapper period="anio" />
       </TabsContent>
     </Tabs>
   );
 }
-
