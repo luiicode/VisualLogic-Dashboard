@@ -4,13 +4,17 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import { performanceConfig } from "@/features/Overview/constants/performanceConfig";
-import { performanceData } from "@/features/Overview/data/performanceData";
 import { CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts";
+import { PerformanceLineData } from "@/features/Overview/interfaces/PerformanceLineData";
 
-export default function PerformanceLineChart() {
+export default function PerformanceLineChart({
+  data,
+}: {
+  data: PerformanceLineData[];
+}) {
   return (
     <ChartContainer config={performanceConfig} className="h-[260px] w-full">
-      <LineChart data={performanceData}>
+      <LineChart data={data}>
         <CartesianGrid strokeDasharray="3 3" vertical={false} />
         <XAxis dataKey="week" tickLine={false} axisLine={false} />
         <YAxis tickLine={false} axisLine={false} domain={[60, 100]} />
@@ -33,4 +37,3 @@ export default function PerformanceLineChart() {
     </ChartContainer>
   );
 }
-

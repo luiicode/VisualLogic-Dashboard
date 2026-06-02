@@ -1,9 +1,20 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import PerformanceLineChart from "@/features/Overview/components/chart/PerformanceLineChart";
+import { PerformanceLineData } from "@/features/Overview/interfaces/PerformanceLineData";
 import { ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 
-export default function PerformanceCard() {
+export default function PerformanceCard({
+  data,
+}: {
+  data: PerformanceLineData[];
+}) {
   return (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between">
@@ -19,9 +30,8 @@ export default function PerformanceCard() {
         </Link>
       </CardHeader>
       <CardContent>
-        <PerformanceLineChart />
+        <PerformanceLineChart data={data} />
       </CardContent>
     </Card>
   );
 }
-

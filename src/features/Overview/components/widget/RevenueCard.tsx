@@ -1,9 +1,15 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import RevenueAreaChart from "@/features/Overview/components/chart/RevenueAreaChart";
 import { ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 
-export default function RevenueCard() {
+export default function RevenueCard({ data }: { data: any[] }) {
   return (
     <Card className="lg:col-span-2">
       <CardHeader className="flex flex-row items-center justify-between">
@@ -19,9 +25,8 @@ export default function RevenueCard() {
         </Link>
       </CardHeader>
       <CardContent>
-        <RevenueAreaChart />
+        <RevenueAreaChart data={data} />
       </CardContent>
     </Card>
   );
 }
-

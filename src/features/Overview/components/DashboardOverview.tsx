@@ -9,15 +9,10 @@ export default function DashboardOverview() {
   return (
     <div className="p-6 space-y-6">
       <OverviewHeaderPage />
-      {/* KPIs */}
       <KPIsCards />
-      {/* Charts row 1 */}
       <FirstChartsRow />
-      {/* Charts row 2 */}
       <SecondChartsRow />
-      {/* Tables */}
       <TablesSection />
-      {/* Mini KPIs footer */}
       <KPIsFooter />
     </div>
   );

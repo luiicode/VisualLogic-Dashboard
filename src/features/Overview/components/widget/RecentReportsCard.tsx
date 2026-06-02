@@ -5,28 +5,28 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import RecentTicketsTable from "@/features/Overview/components/table/RecentTicketsTable";
-import { TicketRow } from "@/features/Overview/interfaces/TicketRow";
+import RecentReportsTable from "@/features/Overview/components/table/RecentReportsTable";
+import { ReportRow } from "@/features/Overview/interfaces/ReportRow";
 import { ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 
-export default function RecentTicketsCard({ data }: { data: TicketRow[] }) {
+export default function RecentReportsCard({ data }: { data: ReportRow[] }) {
   return (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between">
         <div>
-          <CardTitle>Tickets recientes</CardTitle>
-          <CardDescription>Últimas actividades</CardDescription>
+          <CardTitle>Reportes Operativos</CardTitle>
+          <CardDescription>Últimas entregas del equipo</CardDescription>
         </div>
         <Link
-          href="/tickets"
+          href="/analytics"
           className="text-xs text-muted-foreground inline-flex items-center gap-1 hover:text-foreground"
         >
-          Ver todos <ArrowUpRight className="h-3 w-3" />
+          Ver análisis <ArrowUpRight className="h-3 w-3" />
         </Link>
       </CardHeader>
       <CardContent>
-        <RecentTicketsTable data={data} />
+        <RecentReportsTable data={data} />
       </CardContent>
     </Card>
   );

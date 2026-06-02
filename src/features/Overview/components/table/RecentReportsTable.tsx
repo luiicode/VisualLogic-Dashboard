@@ -8,13 +8,13 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { statusClass } from "@/features/Overview/constants/status-style";
-import { TicketRow } from "@/features/Overview/interfaces/TicketRow";
+import { ReportRow } from "@/features/Overview/interfaces/ReportRow";
 
-export default function RecentTicketsTable({ data }: { data: TicketRow[] }) {
+export default function RecentReportsTable({ data }: { data: ReportRow[] }) {
   if (!data || data.length === 0)
     return (
       <div className="p-4 text-sm text-muted-foreground text-center">
-        No hay tickets recientes
+        No hay reportes recientes
       </div>
     );
 
@@ -22,24 +22,23 @@ export default function RecentTicketsTable({ data }: { data: TicketRow[] }) {
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead>ID</TableHead>
-          <TableHead>Usuario</TableHead>
+          <TableHead>Reporte</TableHead>
           <TableHead>Status</TableHead>
-          <TableHead className="text-right">Fecha</TableHead>
+          <TableHead className="text-right">Fecha de Entrega</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
-        {data.map((ticket, i) => (
-          <TableRow key={`${ticket.id}-${i}`}>
-            <TableCell className="font-mono text-xs">{ticket.id}</TableCell>
-            <TableCell>{ticket.user}</TableCell>
+        {data.map((report, i) => (
+          <TableRow key={i}>
+            {/* Como no pedimos un ID de reporte en Salesforce, usamos un correlativo visual */}
+            <TableCell className="font-medium">Rep_Op_{i + 1}</TableCell>
             <TableCell>
-              <Badge className={statusClass(ticket.status)} variant="secondary">
-                {ticket.status}
+              <Badge className={statusClass(report.status)} variant="secondary">
+                {report.status}
               </Badge>
             </TableCell>
             <TableCell className="text-right text-muted-foreground">
-              {ticket.date}
+              {report.date}
             </TableCell>
           </TableRow>
         ))}

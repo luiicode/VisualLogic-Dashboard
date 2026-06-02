@@ -4,13 +4,13 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import { ticketsConfig } from "@/features/Overview/constants/ticketsConfig";
-import { ticketsData } from "@/features/Overview/data/ticketsData";
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
+import { TicketsBarData } from "@/features/Overview/interfaces/TicketsBarData";
 
-export default function TicketsBarChart() {
+export default function TicketsBarChart({ data }: { data: TicketsBarData[] }) {
   return (
     <ChartContainer config={ticketsConfig} className="h-[260px] w-full">
-      <BarChart data={ticketsData}>
+      <BarChart data={data}>
         <CartesianGrid strokeDasharray="3 3" vertical={false} />
         <XAxis dataKey="month" tickLine={false} axisLine={false} />
         <YAxis tickLine={false} axisLine={false} />
@@ -21,4 +21,3 @@ export default function TicketsBarChart() {
     </ChartContainer>
   );
 }
-
