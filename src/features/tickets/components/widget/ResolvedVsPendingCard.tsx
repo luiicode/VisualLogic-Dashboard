@@ -1,5 +1,11 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import ResolvedVsPendingChart from "@/features/tickets/components/chart/ResolvedVsPendingChart";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import ResolvedVsPendingWrapper from "@/features/tickets/components/wrapper/ResolvedVsPendingWrapper";
 
 export default function ResolvedVsPendingCard() {
   return (
@@ -9,9 +15,8 @@ export default function ResolvedVsPendingCard() {
         <CardDescription>Comparativa mensual</CardDescription>
       </CardHeader>
       <CardContent>
-        <ResolvedVsPendingChart />
+        <ResolvedVsPendingWrapper />
       </CardContent>
     </Card>
   );
 }
-

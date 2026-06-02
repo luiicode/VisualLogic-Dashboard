@@ -5,10 +5,7 @@ import {
 } from "@/components/ui/chart";
 import { revenueConfig } from "@/features/sales/constants/revenueConfig";
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
-
-interface OrdersPerMonthChartProps {
-  data: { month: string; orders: number }[];
-}
+import { OrdersPerMonthChartProps } from "@/features/sales/interfaces/OrdersPerMonthChartProps";
 
 export default function OrdersPerMonthChart({
   data,

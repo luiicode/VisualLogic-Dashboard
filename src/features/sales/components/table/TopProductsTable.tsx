@@ -6,15 +6,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-
-interface TopProductsTableProps {
-  data: {
-    id: number;
-    product: string;
-    units: number;
-    revenue: number;
-  }[];
-}
+import { TopProductsTableProps } from "@/features/sales/interfaces/TopProductsTableProps";
 
 export default function TopProductsTable({ data }: TopProductsTableProps) {
   return (

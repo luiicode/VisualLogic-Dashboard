@@ -1,5 +1,11 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import StatusDistributionChart from "@/features/tickets/components/chart/StatusDistributionChart";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import StatusDistributionWrapper from "@/features/tickets/components/wrapper/StatusDistributionWrapper";
 
 export default function StatusDistributionCard() {
   return (
@@ -9,9 +15,8 @@ export default function StatusDistributionCard() {
         <CardDescription>Proporción actual de tickets</CardDescription>
       </CardHeader>
       <CardContent>
-        <StatusDistributionChart />
+        <StatusDistributionWrapper />
       </CardContent>
     </Card>
   );
 }
-

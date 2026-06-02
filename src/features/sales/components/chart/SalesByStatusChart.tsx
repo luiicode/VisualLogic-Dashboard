@@ -5,10 +5,7 @@ import {
 } from "@/components/ui/chart";
 import { statusColors } from "@/features/sales/constants/statusColors";
 import { Cell, Pie, PieChart } from "recharts";
-
-interface SalesByStatusChartProps {
-  data: { name: string; value: number }[];
-}
+import { SalesByStatusChartProps } from "@/features/sales/interfaces/SalesByStatusChartProps";
 
 export default function SalesByStatusChart({ data }: SalesByStatusChartProps) {
   const config = { value: { label: "Monto" } };

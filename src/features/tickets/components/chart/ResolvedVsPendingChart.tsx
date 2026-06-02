@@ -4,13 +4,15 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import { chartConfig } from "@/features/tickets/constants/chartConfig";
-import { monthly } from "@/features/tickets/constants/monthly";
 import { BarChart, Bar, CartesianGrid, XAxis, YAxis } from "recharts";
+import { ResolvedVsPendingChartProps } from "@/features/tickets/interfaces/ResolvedVsPendingChartProps";
 
-export default function ResolvedVsPendingChart() {
+export default function ResolvedVsPendingChart({
+  data,
+}: ResolvedVsPendingChartProps) {
   return (
     <ChartContainer config={chartConfig} className="h-[260px] w-full">
-      <BarChart data={monthly}>
+      <BarChart data={data}>
         <CartesianGrid strokeDasharray="3 3" />
         <XAxis dataKey="month" />
         <YAxis />
@@ -29,4 +31,3 @@ export default function ResolvedVsPendingChart() {
     </ChartContainer>
   );
 }
-

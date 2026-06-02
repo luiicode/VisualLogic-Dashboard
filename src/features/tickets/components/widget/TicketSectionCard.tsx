@@ -1,21 +1,30 @@
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "@/components/ui/card";
 import TicketsTable from "@/features/tickets/components/table/TicketsTable";
-import { tickets } from "@/features/tickets/data/ticketsData";
+import { TicketSectionCardProps } from "@/features/tickets/interfaces/TicketSectionCardProps";
 
-export default function TicketSectionCard({ sectionName }: { sectionName: string }) {
-  const section = tickets.find((s) => s.section === sectionName);
-  if (!section) return null;
+export default function TicketSectionCard({
+  sectionName,
+  rows,
+}: TicketSectionCardProps) {
+  if (!rows || rows.length === 0) return null;
 
   return (
     <Card>
       <CardHeader>
-        <CardTitle>{section.section}</CardTitle>
-        <CardDescription>{section.rows.length} tickets</CardDescription>
+        <CardTitle>{sectionName}</CardTitle>
+        <CardDescription>
+          {rows.length} {rows.length === 1 ? "ticket" : "tickets"}
+        </CardDescription>
       </CardHeader>
       <CardContent>
-        <TicketsTable sectionName={section.section} />
+        <TicketsTable rows={rows} />
       </CardContent>
     </Card>
   );
 }
-

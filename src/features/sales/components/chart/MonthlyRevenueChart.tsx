@@ -5,10 +5,7 @@ import {
 } from "@/components/ui/chart";
 import { revenueConfig } from "@/features/sales/constants/revenueConfig";
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
-
-interface MonthlyRevenueChartProps {
-  data: { month: string; revenue: number }[];
-}
+import { MonthlyRevenueChartProps } from "@/features/sales/interfaces/MonthlyRevenueChartProps";
 
 export default function MonthlyRevenueChart({
   data,

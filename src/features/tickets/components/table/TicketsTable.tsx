@@ -1,12 +1,17 @@
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { tickets } from "@/features/tickets/data/ticketsData";
 import { statusVariant } from "@/features/tickets/constants/status-style";
+import { TicketRow } from "@/features/tickets/interfaces/TicketRow";
 
-export default function TicketsTable({ sectionName }: { sectionName: string }) {
-  const section = tickets.find((s) => s.section === sectionName);
-
-  if (!section) return null;
+export default function TicketsTable({ rows }: { rows: TicketRow[] }) {
+  if (!rows || rows.length === 0) return null;
 
   return (
     <Table>
@@ -20,13 +25,19 @@ export default function TicketsTable({ sectionName }: { sectionName: string }) {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {section.rows.map((row) => (
+        {rows.map((row) => (
           <TableRow key={row.orderId}>
             <TableCell className="font-mono">{row.orderId}</TableCell>
             <TableCell className="font-medium">{row.user}</TableCell>
             <TableCell className="text-muted-foreground">{row.email}</TableCell>
             <TableCell>
-              <Badge variant="outline" className={statusVariant[row.status]}>
+              <Badge
+                variant="outline"
+                className={
+                  statusVariant[row.status as keyof typeof statusVariant] ||
+                  "bg-gray-100 text-gray-800"
+                }
+              >
                 {row.status}
               </Badge>
             </TableCell>
@@ -37,4 +48,3 @@ export default function TicketsTable({ sectionName }: { sectionName: string }) {
     </Table>
   );
 }
-

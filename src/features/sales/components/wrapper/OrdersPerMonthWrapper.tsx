@@ -3,25 +3,10 @@
 import useSWR from "swr";
 import { fetchMonthlyOrdersData } from "@/lib/actions/sales";
 import OrdersPerMonthChart from "../chart/OrdersPerMonthChart";
+import { monthNames } from "@/features/sales/constants/monthNames";
 
 async function getAndFormatMonthlyOrders() {
   const rawData = await fetchMonthlyOrdersData();
-
-  // Plantilla con los meses en cero
-  const monthNames = [
-    "Ene",
-    "Feb",
-    "Mar",
-    "Abr",
-    "May",
-    "Jun",
-    "Jul",
-    "Ago",
-    "Sep",
-    "Oct",
-    "Nov",
-    "Dic",
-  ];
 
   const monthlyCounts = monthNames.map((month) => ({ month, orders: 0 }));
 

@@ -1,5 +1,11 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import MonthlyEvolutionChart from "@/features/tickets/components/chart/MonthlyEvolutionChart";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import MonthlyEvolutionWrapper from "@/features/tickets/components/wrapper/MonthlyEvolutionWrapper";
 
 export default function MonthlyEvolutionCard() {
   return (
@@ -9,9 +15,8 @@ export default function MonthlyEvolutionCard() {
         <CardDescription>Totales, resueltos y pendientes</CardDescription>
       </CardHeader>
       <CardContent>
-        <MonthlyEvolutionChart />
+        <MonthlyEvolutionWrapper />
       </CardContent>
     </Card>
   );
 }
-

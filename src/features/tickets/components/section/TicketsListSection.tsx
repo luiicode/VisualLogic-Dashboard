@@ -1,13 +1,9 @@
-import { tickets } from "@/features/tickets/data/ticketsData";
-import TicketSectionCard from "@/features/tickets/components/widget/TicketSectionCard";
+import TicketsListWrapper from "@/features/tickets/components/wrapper/TicketsListWrapper";
 
 export default function TicketsListSection() {
   return (
     <div className="space-y-6">
-      {tickets.map((section) => (
-        <TicketSectionCard key={section.section} sectionName={section.section} />
-      ))}
+      <TicketsListWrapper />
     </div>
   );
 }
-

@@ -8,15 +8,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { statusVariant } from "@/features/sales/constants/status-style";
-
-interface Order {
-  id: string;
-  customer: string;
-  product: string;
-  date: string;
-  amount: number;
-  status: keyof typeof statusVariant;
-}
+import { Order } from "@/features/sales/interfaces/Order";
 
 export default function RecentOrdersTable({ data }: { data: Order[] }) {
   return (
