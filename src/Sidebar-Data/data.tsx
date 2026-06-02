@@ -1,11 +1,8 @@
 import {
   ChartLineIcon,
   ContactIcon,
-  FrameIcon,
   HelpCircleIcon,
   HomeIcon,
-  PieChartIcon,
-  Smartphone,
   StoreIcon,
   TicketIcon,
 } from "lucide-react";
@@ -42,7 +39,7 @@ export const data = {
   navSecondary: [
     {
       title: "Support",
-      url: "/support",
+      url: "/",
       icon: <HelpCircleIcon />,
     },
   ],

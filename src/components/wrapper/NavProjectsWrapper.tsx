@@ -20,7 +20,7 @@ async function getAndFormatSidebarProjects() {
   return projectNames.map((name, index) => ({
     name,
     // Creamos una URL amigable automáticamente (ej. "Atlas CRM" -> "/projects/atlas-crm")
-    url: `/projects/${name.toLowerCase().replace(/\s+/g, "-")}`,
+    url: `/`,
     // Asignamos un ícono rotativo de la colección
     icon: icons[index % icons.length],
   }));

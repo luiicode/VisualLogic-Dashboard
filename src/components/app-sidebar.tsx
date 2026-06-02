@@ -3,7 +3,6 @@
 import * as React from "react";
 
 import { NavMain } from "@/components/nav-main";
-import { NavProjects } from "@/components/nav-projects";
 import { NavSecondary } from "@/components/nav-secondary";
 import { NavUser } from "@/components/nav-user";
 import {
@@ -18,7 +17,7 @@ import {
 import { LogoIcon } from "./ui/svg/LogoIcon";
 import Link from "next/link";
 
-import { data } from "@/mock/mock.data";
+import { data } from "@/Sidebar-Data/data";
 import { NavProjectsWrapper } from "@/components/wrapper/NavProjectsWrapper";
 
 interface AppSidebarProps extends React.ComponentProps<typeof Sidebar> {
