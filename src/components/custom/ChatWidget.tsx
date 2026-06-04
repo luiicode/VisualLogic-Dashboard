@@ -170,7 +170,7 @@ export default function ChatWidget() {
         {isOpen ? (
           <span className="text-xl">✕</span>
         ) : (
-          <span className="text-2xl font-semibold font-serif">N</span>
+          <span className="text-2xl font-semibold font-serif">A</span>
         )}
       </button>
     </div>
