@@ -5,6 +5,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 import React from "react";
+import ChatWidget from "@/components/custom/ChatWidget";
 
 export default async function DashboardLayout({
   children,
@@ -30,6 +31,7 @@ export default async function DashboardLayout({
             {children}
           </div>
         </SidebarInset>
+        <ChatWidget />
       </SidebarProvider>
     </TooltipProvider>
   );
