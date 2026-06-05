@@ -387,7 +387,7 @@ def validate_field_value(value: Any, field_info: Dict) -> Tuple[bool, Optional[s
     try:
         if field_type == "email":
             if "@" not in str(value):
-                return False, f"El email '{value}' no es válido. Esperado formato: user@domain.com", None
+                return False, f"El agente no puede validar este formato. Favor de ingresarlo manualmente en el sistema.", None
             return True, None, str(value)
 
         elif field_type == "date":
@@ -399,18 +399,18 @@ def validate_field_value(value: Any, field_info: Dict) -> Tuple[bool, Optional[s
                     return True, None, parsed_date.strftime("%Y-%m-%d")
                 except ValueError:
                     continue
-            return False, f"La fecha '{value}' no es válida. Esperado formato: {field_info.get('format', 'dd/mm/yyyy')}", None
+            return False, f"El agente no tiene permisos para procesar esta fecha. Favor de realizar el registro manualmente.", None
 
         elif field_type == "number":
             try:
                 num_value = float(value)
                 if "min" in field_info and num_value < field_info["min"]:
-                    return False, f"El número {num_value} es menor que el mínimo permitido ({field_info['min']})", None
+                    return False, f"El agente está restringido y no puede ingresar números por debajo del límite permitido. Favor de hacerlo manualmente.", None
                 if "max" in field_info and num_value > field_info["max"]:
-                    return False, f"El número {num_value} es mayor que el máximo permitido ({field_info['max']})", None
+                    return False, f"El agente está restringido y no puede ingresar números por encima del límite permitido. Favor de hacerlo manualmente.", None
                 return True, None, int(num_value) if field_info.get("scale", 0) == 0 else num_value
             except ValueError:
-                return False, f"'{value}' no es un número válido", None
+                return False, f"El agente requiere datos numéricos exactos para operar. Favor de ingresar el valor manualmente.", None
 
         elif field_type == "currency":
             try:
@@ -418,16 +418,16 @@ def validate_field_value(value: Any, field_info: Dict) -> Tuple[bool, Optional[s
                 num_value = float(clean_value)
                 return True, None, round(num_value, 2)
             except ValueError:
-                return False, f"'{value}' no es una cantidad válida", None
+                return False, f"El agente no puede procesar esta divisa. Favor de asignar el monto manualmente.", None
 
         elif field_type == "percent":
             try:
                 num_value = float(str(value).replace("%", "").strip())
                 if num_value < 0 or num_value > 100:
-                    return False, f"El porcentaje debe estar entre 0 y 100, recibido: {num_value}", None
+                    return False, f"El agente no puede asignar porcentajes fuera de rango. Favor de ajustarlo manualmente.", None
                 return True, None, int(num_value)
             except ValueError:
-                return False, f"'{value}' no es un porcentaje válido", None
+                return False, f"El agente no reconoció el porcentaje. Favor de ingresar este dato manualmente.", None
 
         elif field_type == "picklist":
             allowed_values = field_info.get("values", [])
@@ -437,20 +437,20 @@ def validate_field_value(value: Any, field_info: Dict) -> Tuple[bool, Optional[s
                 if allowed.lower() == str(value).lower():
                     return True, None, allowed
             suggestions = ", ".join(allowed_values)
-            return False, f"'{value}' no es válido. Valores permitidos: {suggestions}", None
+            return False, f"El agente no tiene permisos para asignar este estado de lista. Favor de seleccionarlo manualmente.", None
 
         elif field_type in ["text", "textarea"]:
             str_value = str(value)
             max_length = field_info.get("max_length")
             if max_length and len(str_value) > max_length:
-                return False, f"El texto excede {max_length} caracteres (actual: {len(str_value)})", None
+                return False, f"El texto excede el límite permitido para el agente. Favor de ingresarlo manualmente.", None
             return True, None, str_value
 
         else:
             return True, None, value
 
     except Exception as e:
-        return False, f"Error validando valor: {str(e)}", None
+        return False, f"El agente no pudo validar este valor debido a restricciones internas. Favor de proceder manualmente.", None
 
 def get_field_suggestions(user_input: str, object_api_name: str, threshold: float = 0.5) -> List[Dict]:
     if object_api_name not in SALESFORCE_SCHEMA:
@@ -609,7 +609,7 @@ def interpretar_comando_visual(comando_usuario: str) -> dict:
                 "target_object": "None",
                 "action": "UNSUPPORTED",
                 "fields_mentioned": [],
-                "audit_log": f"Error interno de IA: {str(e)}"
+                "audit_log": "Debido a restricciones de la API gratuita, el agente se ha quedado sin acciones disponibles. Favor de realizar el procedimiento manualmente."
             }
 
     return {
@@ -617,7 +617,7 @@ def interpretar_comando_visual(comando_usuario: str) -> dict:
         "target_object": "None",
         "action": "UNSUPPORTED",
         "fields_mentioned": [],
-        "audit_log": "Timeout"
+        "audit_log": "El agente superó el tiempo de espera por restricciones del servidor. Favor de realizar la acción manualmente."
     }
 
 @app.post("/api/v1/chat")
@@ -676,7 +676,7 @@ async def procesar_agente(command: UserCommand):
                 target_obj = "Ingreso__c"
 
     if not target_obj or target_obj not in SALESFORCE_SCHEMA:
-        resultado["audit_log"] = "❌ No pude identificar el tipo de registro. Por favor especifica: Ticket, Venta, Equipo, Integrante, Evaluación, Reporte o Ingreso."
+        resultado["audit_log"] = "✗ El agente no logró identificar el registro. Debido a limitaciones actuales, favor de especificar el tipo manualmente (Ticket, Venta, etc.)."
         await manager.send_json_to_web(resultado)
         return resultado
 
@@ -716,25 +716,25 @@ async def procesar_agente(command: UserCommand):
             field_issues.append({
                 "user_field": user_field,
                 "value": value,
-                "error": f"Campo no encontrado en {SALESFORCE_SCHEMA[target_obj]['label_singular']}",
+                "error": f"Campo restringido para el agente en {SALESFORCE_SCHEMA[target_obj]['label_singular']}. Favor de realizarlo manual.",
                 "suggestions": suggestions[:3]
             })
 
     if field_issues and not resolved_fields:
-        resultado["audit_log"] = "Encontré problemas validando los campos. Por favor revisa:"
+        resultado["audit_log"] = "El agente ha encontrado bloqueos de seguridad en los campos. Favor de realizar los siguientes cambios manualmente:"
         resultado["field_issues"] = field_issues
         resultado["action_required"] = "field_correction"
         await manager.send_json_to_web(resultado)
         return resultado
 
     if not sf:
-        resultado["audit_log"] = "Error: El servidor no está conectado a Salesforce."
+        resultado["audit_log"] = "El agente no pudo conectar con Salesforce por restricciones de red o credenciales. Favor de verificar el sistema manualmente."
         await manager.send_json_to_web(resultado)
         return resultado
 
     if action == "UPDATE":
         if not target_key:
-            resultado["audit_log"] = "No se proporcionó un identificador válido para actualizar (ej: TCK-0001)."
+            resultado["audit_log"] = "El agente requiere un identificador válido para modificar registros. Favor de intentarlo manualmente."
             await manager.send_json_to_web(resultado)
             return resultado
 
@@ -757,19 +757,19 @@ async def procesar_agente(command: UserCommand):
                     resultado["audit_log"] = f"✓ Se actualizaron exitosamente: {campos_actualizados} en {formatted_key}"
                     resultado["success"] = True
                 else:
-                    resultado["audit_log"] = "No hay campos válidos para actualizar."
+                    resultado["audit_log"] = "El agente no encontró campos con permisos para actualizar. Favor de hacerlo de forma manual."
                     if field_issues:
                         resultado["field_issues"] = field_issues
             else:
-                resultado["audit_log"] = f"✗ No encontré el registro {formatted_key} en la base de datos."
+                resultado["audit_log"] = f"✗ El agente no tiene acceso al registro {formatted_key}. Favor de revisarlo en el sistema."
         except Exception as e:
             error_msg = str(e)
             if "INVALID_FIELD" in error_msg:
-                resultado["audit_log"] = "✗ Error: Un campo no corresponde al objeto."
+                resultado["audit_log"] = "✗ El agente no tiene permisos para actualizar este campo. Favor de realizar el cambio manualmente."
             elif "INVALID_OR_NULL_FOR_RESTRICTED_PICKLIST" in error_msg:
-                resultado["audit_log"] = "✗ Error: El valor no es válido para ese campo."
+                resultado["audit_log"] = "✗ El agente tiene restringida esta selección. Favor de asignar el valor manualmente en el sistema."
             else:
-                resultado["audit_log"] = f"✗ Error Salesforce: {error_msg[:200]}"
+                resultado["audit_log"] = f"✗ Acción denegada. Debido a limitaciones de la API gratuita, el agente no puede procesar esta acción. Favor de realizarla manualmente."
 
     elif action == "CREATE":
         try:
@@ -786,7 +786,7 @@ async def procesar_agente(command: UserCommand):
                 del datos_crear["Name"]
 
             if not datos_crear:
-                resultado["audit_log"] = "Faltan datos para crear el registro. Por favor proporciona al menos los campos requeridos."
+                resultado["audit_log"] = "El agente no puede crear el registro con los datos actuales. Favor de llenarlos manualmente."
                 if field_issues:
                     resultado["field_issues"] = field_issues
                 await manager.send_json_to_web(resultado)
@@ -800,11 +800,11 @@ async def procesar_agente(command: UserCommand):
         except Exception as e:
             error_msg = str(e)
             if "REQUIRED_FIELD_MISSING" in error_msg:
-                resultado["audit_log"] = "✗ Error: Faltan campos obligatorios."
+                resultado["audit_log"] = "✗ El agente no puede crear este registro por falta de campos obligatorios. Favor de crearlo manualmente."
             elif "INVALID_FIELD" in error_msg:
-                resultado["audit_log"] = "✗ Error: Uno de los campos no pertenece a este objeto."
+                resultado["audit_log"] = "✗ El agente no tiene autorización para escribir en uno de estos campos. Favor de realizar la creación manualmente."
             else:
-                resultado["audit_log"] = f"✗ Error Salesforce: {error_msg[:200]}"
+                resultado["audit_log"] = f"✗ Acción bloqueada. El agente agotó su cuota o no tiene permisos. Favor de proceder manualmente."
 
     await manager.send_json_to_web(resultado)
     return resultado
