@@ -67,7 +67,6 @@ except FileNotFoundError:
 except Exception as e:
     print(f"\n[ERROR CRÍTICO]: Falla de red o encriptación: {e}\n")
 
-# ============ MAPEO COMPLETO DE CAMPOS Y TIPOS DE DATOS ============
 SALESFORCE_SCHEMA = {
     "Ticket__c": {
         "label_singular": "Ticket",
@@ -355,23 +354,15 @@ SALESFORCE_SCHEMA = {
     }
 }
 
-# ============ FUNCIONES UTILITARIAS ============
-
 def normalize_field_name(user_input: str) -> str:
-    """Normaliza el nombre del campo del usuario a formato de búsqueda."""
     return user_input.lower().strip().replace(" ", "_").replace("ó", "o").replace("á", "a").replace("é", "e").replace("í", "i").replace("ú", "u")
 
 def find_best_field_match(user_input: str, object_api_name: str) -> Tuple[Optional[str], float]:
-    """
-    Encuentra el campo más similar usando fuzzy matching.
-    Retorna (nombre_api_del_campo, similitud)
-    """
     if object_api_name not in SALESFORCE_SCHEMA:
         return None, 0.0
 
     fields = SALESFORCE_SCHEMA[object_api_name]["fields"]
     normalized_input = normalize_field_name(user_input)
-
     best_match = None
     best_score = 0.0
 
@@ -379,7 +370,6 @@ def find_best_field_match(user_input: str, object_api_name: str) -> Tuple[Option
         label = field_info.get("label", "").lower()
         normalized_label = normalize_field_name(label)
 
-        # Buscar coincidencia en label y en api_name
         label_ratio = SequenceMatcher(None, normalized_input, normalized_label).ratio()
         api_ratio = SequenceMatcher(None, normalized_input, normalize_field_name(api_name)).ratio()
 
@@ -392,10 +382,6 @@ def find_best_field_match(user_input: str, object_api_name: str) -> Tuple[Option
     return best_match, best_score
 
 def validate_field_value(value: Any, field_info: Dict) -> Tuple[bool, Optional[str], Any]:
-    """
-    Valida que el valor sea del tipo correcto para el campo.
-    Retorna (es_válido, mensaje_error, valor_convertido)
-    """
     field_type = field_info.get("type")
 
     try:
@@ -405,11 +391,12 @@ def validate_field_value(value: Any, field_info: Dict) -> Tuple[bool, Optional[s
             return True, None, str(value)
 
         elif field_type == "date":
-            date_formats = ["%d/%m/%Y", "%d-%m-%Y", "%Y-%m-%d", "%d/%m/%y"]
+            date_formats = ["%d/%m/%Y", "%d-%m-%Y", "%Y-%m-%d", "%d/%m/%y", "%Y/%m/%d"]
             for fmt in date_formats:
                 try:
                     parsed_date = datetime.strptime(str(value), fmt)
-                    return True, None, parsed_date.strftime("%d/%m/%Y")
+                    # CORRECCIÓN: Salesforce siempre requiere formato YYYY-MM-DD
+                    return True, None, parsed_date.strftime("%Y-%m-%d")
                 except ValueError:
                     continue
             return False, f"La fecha '{value}' no es válida. Esperado formato: {field_info.get('format', 'dd/mm/yyyy')}", None
@@ -466,9 +453,6 @@ def validate_field_value(value: Any, field_info: Dict) -> Tuple[bool, Optional[s
         return False, f"Error validando valor: {str(e)}", None
 
 def get_field_suggestions(user_input: str, object_api_name: str, threshold: float = 0.5) -> List[Dict]:
-    """
-    Obtiene sugerencias de campos similares cuando hay discrepancia.
-    """
     if object_api_name not in SALESFORCE_SCHEMA:
         return []
 
@@ -538,9 +522,6 @@ async def websocket_endpoint(websocket: WebSocket):
         manager.disconnect(websocket)
 
 def interpretar_comando_visual(comando_usuario: str) -> dict:
-    """
-    Interpreta comandos del usuario usando Gemini con esquema mejorado.
-    """
     schema_description = "ESQUEMA DE BASE DE DATOS SALESFORCE:\n\n"
     for obj_name, obj_info in SALESFORCE_SCHEMA.items():
         schema_description += f"{obj_info['label_singular']} ({obj_name}):\n"
@@ -576,7 +557,6 @@ def interpretar_comando_visual(comando_usuario: str) -> dict:
     7. 'fields_mentioned': Lista de objetos extrayendo la información solicitada.
     """
 
-    # ESQUEMA REPARADO CON REQUIRED INTERNOS Y TARGET_KEY OBLIGATORIO
     gemini_schema = types.Schema(
         type=types.Type.OBJECT,
         properties={
@@ -593,12 +573,12 @@ def interpretar_comando_visual(comando_usuario: str) -> dict:
                         "value": types.Schema(type=types.Type.STRING),
                         "api_field": types.Schema(type=types.Type.STRING)
                     },
-                    required=["user_field", "value", "api_field"]  # <-- REGLA VITAL
+                    required=["user_field", "value", "api_field"]
                 )
             ),
             "audit_log": types.Schema(type=types.Type.STRING),
         },
-        required=["intent", "target_object", "action", "target_key", "fields_mentioned", "audit_log"] # <-- TARGET_KEY AHORA ES OBLIGATORIO
+        required=["intent", "target_object", "action", "target_key", "fields_mentioned", "audit_log"]
     )
 
     for intento in range(3):
@@ -629,7 +609,7 @@ def interpretar_comando_visual(comando_usuario: str) -> dict:
                 "target_object": "None",
                 "action": "UNSUPPORTED",
                 "fields_mentioned": [],
-                "audit_log": f"Error interno de IA: {str(e)}"  # <-- AHORA VERÁS EL ERROR REAL
+                "audit_log": f"Error interno de IA: {str(e)}"
             }
 
     return {
@@ -767,6 +747,10 @@ async def procesar_agente(command: UserCommand):
                 record_id = query_result['records'][0]['Id']
                 sf_obj = getattr(sf, target_obj)
 
+                # Evitar modificar campos autonuméricos accidentalmente
+                if "Name" in resolved_fields and SALESFORCE_SCHEMA[target_obj]["fields"]["Name"]["type"] == "auto_number":
+                    del resolved_fields["Name"]
+
                 if resolved_fields:
                     sf_obj.update(record_id, resolved_fields)
                     campos_actualizados = ", ".join([f"{SALESFORCE_SCHEMA[target_obj]['fields'][k].get('label', k)}" for k in resolved_fields.keys()])
@@ -792,8 +776,14 @@ async def procesar_agente(command: UserCommand):
             sf_obj = getattr(sf, target_obj)
             datos_crear = resolved_fields.copy()
 
+            # CORRECCIÓN DE SEGURIDAD: Solo pasamos el ID manual si el campo NO es autonumérico
             if target_key and "Name" not in datos_crear:
-                datos_crear["Name"] = target_key
+                if SALESFORCE_SCHEMA[target_obj]["fields"].get("Name", {}).get("type") != "auto_number":
+                    datos_crear["Name"] = target_key
+
+            # Doble filtro: Borrar por completo el "Name" si el esquema dice que es autonumérico
+            if "Name" in datos_crear and SALESFORCE_SCHEMA[target_obj]["fields"].get("Name", {}).get("type") == "auto_number":
+                del datos_crear["Name"]
 
             if not datos_crear:
                 resultado["audit_log"] = "Faltan datos para crear el registro. Por favor proporciona al menos los campos requeridos."
