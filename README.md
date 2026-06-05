@@ -69,7 +69,7 @@ git clone [https://github.com/tu-usuario/tu-repo.git](https://github.com/tu-usua
 cd tu-repo
 ```
 
-**2. Configuración del Motor de IA
+2. Configuración del Motor de IA
 ```bash
 # Abre una terminal y navega a la carpeta del backend
 # Instala las dependencias de Python
@@ -83,7 +83,7 @@ python agent_brain.py
 # (o el nombre de tu archivo principal, ej: uvicorn agent_brain:app --reload)
 ```
 
-**3. Configuración del Dashboard
+3. Configuración del Dashboard
 ```bash
 # Abre una nueva pestaña en tu terminal
 # Instala las dependencias del frontend usando pnpm
@@ -92,7 +92,7 @@ pnpm install
 # Inicia el entorno de desarrollo
 pnpm dev
 ```
-**4. Abre la aplicación:
+4. Abre la aplicación:
 Visita http://localhost:3000 en tu navegador para ver el dashboard en acción y comenzar a interactuar con Vigic.
 
 ---
