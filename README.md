@@ -1,5 +1,3 @@
-Markdown
-
 # 🚀 VisualLogic - Dashboard
 
 > **Hackathon:** Reto Hackatón - Agente de Dashboard
@@ -10,7 +8,7 @@ Markdown
 ## 🏢 El Desafío: Caso Visual Logic
 
 **El Problema:**
-_En la empresa de Visual Logic, las problematicas son la lucha por visualizar KPIs criticos en un solo lugar, además de depender de la creación manual de tableros , loq ue genera retraso en la identificación de cuellos de botella operativos._
+_En la empresa de Visual Logic, las problemáticas son la lucha por visualizar KPIs críticos en un solo lugar, además de depender de la creación manual de tableros, lo que genera retraso en la identificación de cuellos de botella operativos._
 
 **La Solución Esperada:**
 _Un agente capaz de crear y actualizar dashboard en tiempo real, permitiendo visibilidad integral de la facturación, casos abiertos y actividades por equipo sin intervención manual._
@@ -19,66 +17,88 @@ _Un agente capaz de crear y actualizar dashboard en tiempo real, permitiendo vis
 
 ## 💡 Nuestra Solución
 
-<!--
-[Nombre de tu proyecto] resuelve el desafío mediante una arquitectura moderna que integra **Salesforce Agentforce** directamente en un entorno de trabajo unificado. Hemos construido un sistema donde el Agente de IA controla la interfaz visual: los gráficos y las tablas mutan en tiempo real según las peticiones del usuario, creando una experiencia analítica dinámica y conversacional. -->
+VisualLogic resuelve el desafío mediante una arquitectura moderna y desacoplada que integra nuestro motor de IA propio (**Vigic AI**) directamente en un entorno de trabajo unificado. Hemos construido un sistema impulsado por Python y WebSockets donde el agente procesa comandos en lenguaje natural, interactúa de forma autónoma con la base de datos de Salesforce, y envía actualizaciones al frontend en tiempo real. Los gráficos y las tablas mutan al instante, creando una experiencia analítica dinámica, conversacional y sin intervención manual.
 
 ---
 
 ## 🌟 Innovación: Más allá del desafío
 
-<!-- No nos conformamos con cumplir los requisitos básicos. Para aportar un valor diferencial a Visual Logic, implementamos:
+No nos conformamos con cumplir los requisitos básicos. Para aportar un valor diferencial y de nivel empresarial a Visual Logic, implementamos:
 
-* **[Tu Innovación 1]:** *(Ej: "Generación de UI Predictiva. El agente no solo responde a lo que el usuario pide, sino que anticipa sus necesidades y renderiza tarjetas de 'Alertas Críticas' antes de que el usuario haga la pregunta.")*
-* **[Tu Innovación 2]:** *(Ej: "Motor de análisis de sentimiento en el chat, ajustando el tono de las respuestas y resaltando datos urgentes en rojo cuando detecta frustración o urgencia en el trabajador.")*
-* **[Tu Innovación 3]:** *(Ej: "Soporte multimodal básico / Exportación inteligente a un solo clic de los dashboards generados por IA a reportes PDF listos para junta.")* -->
+* **Identidad y Auditoría de IA (Vigic AI):** El agente no es un simple script; opera bajo su propio perfil de integración, credenciales JWT y Conjunto de Permisos en Salesforce. Esto deja un rastro inmutable (Log de Historial) en cada registro modificado para garantizar la gobernanza de datos.
+* **Validación Semántica y Protección de Esquemas:** El motor cuenta con algoritmos de coincidencia difusa (Fuzzy Matching) y protección contra la manipulación de campos autonuméricos. La IA comprende el esquema estricto de Salesforce antes de ejecutar cualquier acción, previniendo errores de API.
+* **Sincronización Bidireccional de Baja Latencia:** Eliminamos el *polling* tradicional implementando una arquitectura basada en WebSockets que empuja los cambios desde el microservicio de IA hacia el dashboard en Next.js de manera instantánea.
 
 ---
 
 ## 📈 Escalabilidad y Futuro
 
-<!-- La arquitectura del proyecto fue diseñada pensando en el crecimiento masivo de Visual Logic:
+La arquitectura del proyecto fue diseñada pensando en el crecimiento masivo de Visual Logic:
 
-* **Arquitectura de Monolito Modular:** Empleamos Next.js con servicios de datos centralizados (`src/services/`). Esto permite que, si la empresa crece, la capa de conexión con Salesforce pueda extraerse fácilmente a un microservicio independiente sin reescribir el Frontend.
-* **Gestión de Estado Ligera (Zustand):** Preparada para manejar múltiples flujos de datos en tiempo real (WebSockets) sin afectar el rendimiento de renderizado de React, soportando dashboards mucho más complejos en el futuro.
-* **Agente Agnóstico en Interfaz:** El modelo MVC (`agent-parser.ts`) permite que el día de mañana el mismo agente de Salesforce pueda conectarse a una aplicación móvil de Visual Logic reutilizando el 90% de la lógica actual. -->
+* **Arquitectura Desacoplada (Frontend + Microservicio IA):** Separamos la interfaz de usuario (Next.js) del motor de inteligencia (FastAPI). Esto permite que, si la empresa crece, la capa de IA pueda escalar en servidores dedicados o integrarse a nuevas plataformas (como una app móvil) sin tocar el código del frontend.
+* **Autenticación Headless (JWT):** Preparada para la automatización a gran escala. La conexión servidor a servidor mediante certificados elimina la necesidad de inicios de sesión manuales por parte del equipo.
+* **Gestión de Estado Ligera (Zustand):** Preparada para manejar múltiples flujos de datos asíncronos y eventos de WebSockets sin afectar el rendimiento de renderizado de React, soportando tableros mucho más complejos en el futuro.
 
 ---
 
 ## ✨ Características Principales
 
-<!-- * **🤖 Integración MVC con Agentforce:** Procesamiento y limpieza de datos en tiempo real.
-* **📊 Dashboard Dinámico:** Gráficos de Recharts que reaccionan al estado global del agente.
-* **🔒 Arquitectura Segura:** Route Groups y Middleware protegiendo el entorno corporativo. -->
-
-- **💎 UI/UX Premium:** Interfaz construida con Shadcn/ui y efecto Glassmorphism.
+* **🤖 Vigic AI Engine:** Procesamiento de lenguaje natural y estructuración JSON inteligente (Gemini 2.5 Flash).
+* **📊 Dashboard Dinámico:** Gráficos y componentes que reaccionan al estado global modificado por la IA en tiempo real.
+* **🔒 Arquitectura Segura:** Flujo de autorización OAuth 2.0 JWT con Salesforce Data Cloud.
+* **💎 UI/UX Premium:** Interfaz construida con Shadcn/ui, Tailwind CSS y efecto Glassmorphism.
 
 ---
 
 ## 🛠️ Stack Tecnológico
 
-- **Frontend:** Next.js (App Router), React, Tailwind CSS
-- **Librerías Visuales:** Shadcn/ui & Lucide Icons
-- **Backend & IA:** Salesforce Agentforce
+* **Frontend:** Next.js (App Router), React, Tailwind CSS, Zustand
+* **Backend & IA:** Python, FastAPI, WebSockets, Google Gemini API
+* **Bases de Datos & Auth:** Salesforce (Simple-Salesforce), JWT Authentication
+* **Librerías Visuales:** Shadcn/ui, Lucide Icons, Recharts
 
 ---
 
 ## 🚀 Cómo ejecutarlo localmente
 
-1. Clona este repositorio:
+Para correr este proyecto en tu entorno local, necesitas levantar tanto el servidor del motor de IA como el frontend de Next.js.
 
-   ```bash
-   git clone [https://github.com/tu-usuario/tu-repo.git](https://github.com/tu-usuario/tu-repo.git)
+**1. Clona este repositorio:**
+```bash
+git clone [https://github.com/tu-usuario/tu-repo.git](https://github.com/tu-usuario/tu-repo.git)
+cd tu-repo
+```
 
-    Instala las dependencias:
-    Bash
+**2. Configuración del Motor de IA
+```bash
+# Abre una terminal y navega a la carpeta del backend
+# Instala las dependencias de Python
+pip install fastapi uvicorn google-genai pydantic python-dotenv simple-salesforce pyjwt requests websockets
 
-    pnpm install
+# Asegúrate de configurar tu archivo .env con tus llaves (GEMINI_API_KEY, SF_USERNAME, etc.)
+# Asegúrate de tener tu certificado private.pem en la raíz del backend
 
-    Inicia el servidor (pnpm dev) y abre http://localhost:3000.
-   ```
+# Inicia el servidor de Vigic AI
+python agent_brain.py 
+# (o el nombre de tu archivo principal, ej: uvicorn agent_brain:app --reload)
+```
 
-👥 Equipo
+**3. Configuración del Dashboard
+```bash
+# Abre una nueva pestaña en tu terminal
+# Instala las dependencias del frontend usando pnpm
+pnpm install
 
-    Luis Eduardo Cortes Lopez - Arquitectura & Frontend
+# Inicia el entorno de desarrollo
+pnpm dev
+```
+**4. Abre la aplicación:
+Visita http://localhost:3000 en tu navegador para ver el dashboard en acción y comenzar a interactuar con Vigic.
 
-    Sebastian Aristi - Agente-Agentforce & Backend
+---
+
+## 👥 Equipo
+
+Luis Eduardo Cortes Lopez - Desarrollo de la capa de presentación y experiencia de usuario (Next.js/React), y configuración de la autenticación segura, variables de entorno y políticas de acceso en Salesforce Data Cloud.
+
+Sebastian Aristi -  Diseño y arquitectura del backend (Python/FastAPI), integración del motor de inteligencia artificial (Gemini) y estructuración de la lógica de procesamiento de lenguaje natural a esquemas JSON para consumo de APIs.
